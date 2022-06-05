@@ -2,45 +2,29 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
-func fourSum(nums []int, target int) (results [][]int) {
-	sort.Ints(nums)
+func removeDuplicates(nums []int) int {
 	var (
-		n = len(nums)
+		n    = len(nums)
+		left = 0
 	)
-	for i := 0; i < n-3 && nums[i]+nums[i+1]+nums[i+2]+nums[i+3] <= target; i++ {
-		if i > 0 && nums[i] == nums[i-1] || nums[i]+nums[n-3]+nums[n-2]+nums[n-1] < target {
-			continue
-		}
-		for j := i + 1; j < n-2 && nums[i]+nums[j]+nums[j+1]+nums[j+2] <= target; j++ {
-			if j > i+1 && nums[j] == nums[j-1] || nums[i]+nums[j]+nums[n-2]+nums[n-1] < target {
-				continue
-			}
-			for left, right := j+1, n-1; left < right; {
-				sum := nums[i] + nums[j] + nums[left] + nums[right]
-				if sum == target {
-					results = append(results, []int{nums[i], nums[j], nums[left], nums[right]})
-					for left++; left < right && nums[left] == nums[left-1]; left++ {
-					}
-					for right--; left < right && nums[right] == nums[right+1]; right-- {
-					}
-				} else if sum < target {
-					left++
-				} else {
-					right--
-				}
-			}
+	if n == 0 {
+		return left
+	}
+	left++
+	for right := 1; right < n; right++ {
+		if nums[right] != nums[right-1] {
+			nums[left] = nums[right]
+			left++
 		}
 	}
-
-	return
+	return left
 }
 
 func main() {
-	nums := [...]int{1, 0, -1, 0, -2, 2}
-	target := 0
-	result := fourSum(nums[:], target)
+	nums := [...]int{1, 1, 2, 2}
+	// nums := [...]int{0, 0, 1, 1, 1, 2, 2, 3, 3, 4}
+	result := removeDuplicates(nums[:])
 	fmt.Println(result)
 }
